@@ -45,9 +45,9 @@ No optimization - this is our baseline
 
 ### **Key Talking Points**:
 - Numerical correctness verified (`max_abs_diff = 0.0`)
-- ❌ Performance: Multiple kernel launches causing overhead
-- ❌ Memory: Suboptimal layout for GPU coalescing
-- ❌ Missing: Advanced Kokkos optimization patterns
+- Performance: Multiple kernel launches causing overhead
+- Memory: Suboptimal layout for GPU coalescing  
+- Missing: Advanced Kokkos optimization patterns
 
 *"This is where most manual translations stop. But Amp can take it much further."*
 

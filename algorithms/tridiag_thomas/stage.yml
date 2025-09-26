@@ -1,0 +1,69 @@
+name: tridiag_thomas
+description: "MITgcm tridiagonal solver using Thomas algorithm"
+
+sources:
+  mitgcm_repo: "https://github.com/MITgcm/MITgcm.git"
+  target_files:
+    - "pkg/generic_advdiff/gad_som_advect.F"
+    - "pkg/generic_advdiff/gad_som_prep.F"
+    - "model/src/solve_tridiagonal.F"
+  entry_point: "SOLVE_TRIDIAGONAL"
+  dependencies:
+    - "EXCH_XY_RL"
+    - "EXCH_XYZ_RL"
+
+stages:
+  stage1:
+    targets:
+      extract:
+        command: "tools/extract_fortran_routine.sh --routine SOLVE_TRIDIAGONAL --output stage1/extract/"
+        outputs: ["stage1/extract/solve_tridiagonal.f90", "stage1/extract/driver.f90"]
+      
+      explain:
+        command: "tools/explain_mitgcm.py --routine SOLVE_TRIDIAGONAL --context stage1/extract/ --output stage1/docs/"
+        outputs: ["stage1/docs/algorithm_explanation.md", "stage1/docs/performance_analysis.md"]
+        depends: ["extract"]
+      
+      baseline:
+        command: "tools/run_fortran.sh --src stage1/extract/driver.f90 --n 1024 --reps 5 --out stage1/baselines/fortran_baseline.csv"
+        outputs: ["stage1/baselines/fortran_baseline.csv"]
+        depends: ["extract"]
+
+  stage2:
+    targets:
+      plan:
+        command: "tools/stage_runner.py --stage stage2 --target plan --algorithm tridiag_thomas"
+        outputs: ["stage2/plan/translation_plan.md", "stage2/plan/memory_layout.md"]
+        depends: ["stage1.explain", "stage1.baseline"]
+      
+      review:
+        command: "tools/stage_runner.py --stage stage2 --target review --algorithm tridiag_thomas"
+        outputs: ["stage2/review/oracle_feedback.md"]
+        depends: ["plan"]
+
+  stage3:
+    targets:
+      implement:
+        command: "tools/stage_runner.py --stage stage3 --target implement --algorithm tridiag_thomas"
+        outputs: ["stage3/implement/kernel.cpp", "stage3/implement/translation_notes.md"]
+        depends: ["stage2.review"]
+      
+      validate:
+        command: "tools/stage_runner.py --stage stage3 --target validate --algorithm tridiag_thomas"
+        outputs: ["stage3/validate/correctness_report.md", "stage3/validate/performance_comparison.csv"]
+        depends: ["implement"]
+      
+      package_colab:
+        command: "tools/stage_runner.py --stage stage3 --target package_colab --algorithm tridiag_thomas"
+        outputs: ["stage3/package_colab/demo.ipynb"]
+        depends: ["validate"]
+
+validation:
+  tolerance: 1e-10
+  test_sizes: [64, 256, 1024, 4096]
+  backends: ["openmp", "cuda"]
+
+metadata:
+  complexity: "O(N) per tridiagonal system"
+  memory_pattern: "stride-1 access"
+  parallelization: "embarrassingly parallel across multiple systems"

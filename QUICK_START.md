@@ -1,82 +1,132 @@
-# Quick Start: Oracle-Optimized Fortran → Kokkos Demo
+# Quick Start - 3-Stage Fortran → Kokkos Demo
 
-## **30+ second demo**: Local verification
+This guide shows how to run the complete 3-stage modernization workflow from MITgcm algorithm extraction through GPU-accelerated Colab testing.
+
+## Prerequisites
+
+1. **MITgcm Repository**: Clone MITgcm to ~/MITgcp
+   ```bash
+   cd ~
+   git clone https://github.com/MITgcm/MITgcm.git MITgcp
+   ```
+
+2. **Environment Setup**:
+   ```bash
+   export MITGCM_ROOT=~/MITgcp
+   ```
+
+3. **Dependencies**: gfortran, cmake, Kokkos (for Stage 3)
+
+## Stage 1: Extract & Explain (No Optimization)
+
+Extract the MITgcm tridiagonal solver and have Amp explain what it does:
 
 ```bash
-# Test the optimization works locally
-./test_demo.sh
+# Extract algorithm from MITgcm
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target extract
 
-# Expected output:
-# Build successful
-# Significant speedup achieved (33.17x)
-# Perfect numerical agreement verified
-# Package ready for Colab upload
+# Generate algorithm explanation  
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target explain
+
+# Establish Fortran baseline
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target baseline
 ```
 
-## **5-minute demo**: Local performance showcase
+**Outputs:**
+- `algorithms/tridiag_thomas/stage1/extract/solve_tridiagonal.f90` - Extracted Fortran code
+- `algorithms/tridiag_thomas/stage1/docs/algorithm_explanation.md` - Algorithm explanation  
+- `algorithms/tridiag_thomas/stage1/baselines/fortran_baseline.csv` - Performance baseline
+
+## Stage 2: Oracle-Guided Planning
+
+Consult the Oracle for modernization recommendations:
 
 ```bash
-# Show the optimization impact
-kokkos/mitgcm_demo_optimized/build/kernel 1024 10 both
+# Generate modernization plan
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage2 --target plan
 
-# Expected output:
-# Naive Time per iteration: 0.0046 seconds
-# Optimized Time per iteration: 0.0001 seconds
-# Speedup: 33.17x
+# Oracle review and refinement
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage2 --target review
 ```
 
-**Key talking point**: *"Oracle AI identified kernel launch overhead as the bottleneck and recommended TeamPolicy approach, achieving 33x speedup."*
+**Outputs:**
+- `algorithms/tridiag_thomas/stage2/plan/transition_plan.md` - Detailed modernization strategy
 
-## **20-minute demo**: Full GPU demonstration
+## Stage 3: Implementation & Validation
 
-### **Setup** (2 minutes):
-1. Go to https://colab.research.google.com
-2. Upload [`colab_gpu_demo_optimized.ipynb`](file:///Users/sjarmak/gamma-technologies-demo/colab_gpu_demo_optimized.ipynb)
-3. Select **Runtime → Change runtime type → GPU**
-4. Upload [`fortran_kokkos_demo.tar.gz`](file:///Users/sjarmak/gamma-technologies-demo/fortran_kokkos_demo.tar.gz) when prompted
+Oracle reviews plan and coordinates implementation:
 
-### **Key Demo Moments**:
+```bash
+# Implement Kokkos version using subagents
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target implement
 
-**Minute 3-5**: Numerical validation
-- Show `max_abs_diff = 0.0` across platforms
-- *"Perfect numerical fidelity maintained from M4 Mac to Tesla T4"*
+# Validate numerical correctness and performance
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target validate
 
-**Minute 6-12**: Oracle optimization impact
-- Show before/after performance comparison
-- Explain the 4 optimization techniques
-- *"33x local speedup + additional GPU acceleration"*
+# Package for Google Colab GPU testing
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target package_colab
+```
 
-**Minute 13-18**: GPU scaling analysis
-- Performance charts across problem sizes
-- Memory bandwidth utilization analysis
-- T4 architecture-specific optimizations
+**Outputs:**
+- `algorithms/tridiag_thomas/stage3/implement/kernel.cpp` - Kokkos implementation
+- `algorithms/tridiag_thomas/stage3/validate/correctness_report.md` - Validation results
+- `colab_package/tridiag_thomas/` - Ready-to-upload Colab package
 
-**Minute 19-20**: Wrap-up
-- *"Complete M4 Mac → GPU pipeline with AI-guided optimization"*
+## Run Complete Pipeline
 
-## **Files you need**:
+Execute all stages sequentially:
 
-- **Demo script**: [`DEMO_GUIDE.md`](file:///Users/sjarmak/gamma-technologies-demo/DEMO_GUIDE.md) (detailed presentation flow)
-- **Notebook**: [`colab_gpu_demo_optimized.ipynb`](file:///Users/sjarmak/gamma-technologies-demo/colab_gpu_demo_optimized.ipynb) (upload to Colab)
-- **Package**: [`fortran_kokkos_demo.tar.gz`](file:///Users/sjarmak/gamma-technologies-demo/fortran_kokkos_demo.tar.gz) (upload to Colab)
-- **Test**: [`test_demo.sh`](file:///Users/sjarmak/gamma-technologies-demo/test_demo.sh) (verify locally)
+```bash
+# Stage 1: Extract and explain
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target extract
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target explain  
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target baseline
 
-## **Elevator pitch**:
+# Stage 2: Plan and review
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage2 --target plan
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage2 --target review
 
-*"We used Oracle AI to optimize a real MITgcm algorithm translation, achieving 33x CPU speedup with perfect numerical accuracy. The same code now runs efficiently from M4 Mac to Tesla GPU, demonstrating AI-guided performance portability for HPC applications."*
+# Stage 3: Implement, validate, package
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target implement
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target validate
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target package_colab
+```
 
-## **If something goes wrong**:
+## Test the Results
 
-- **Local demo always works**: 33x speedup proven on M4 Mac
-- **Colab backup**: Show local results + explain expected GPU performance
-- **Technical questions**: Oracle provided 4 specific optimizations (see DEMO_GUIDE.md)
+After Stage 3, test the implementations:
 
-## **Success metrics already achieved**:
+```bash
+# Build and run Fortran baseline
+tools/run_fortran.sh --src algorithms/tridiag_thomas/stage1/extract/solve_tridiagonal.f90 --n 1024 --reps 5 --out outputs/fortran_test.csv
 
-**33x performance improvement** from Oracle optimizations
-**Perfect numerical fidelity** (max_abs_diff = 0.0)
-**Real-world relevance** (MITgcm production algorithm)
-**Complete automation** (build/test/validate pipeline)
-**Platform portability** (M4 Mac → GPU ready)
+# Build and run Kokkos implementation  
+tools/build_kokkos.sh --kernel tridiag_thomas --backend openmp
+tools/run_kokkos.sh --kernel tridiag_thomas --n 1024 --reps 5
 
-**Bottom line**: The optimization story is already compelling with local results. GPU demo extends this to show platform portability.
+# Compare numerical accuracy
+python3 tools/compare_outputs.py --fortran outputs/fortran_test.csv --kokkos outputs/tridiag_thomas_kokkos.csv --tol 1e-10
+```
+
+## GPU Testing with Colab
+
+Upload the generated package to Google Colab:
+
+1. Compress the package: `tar -czf tridiag_thomas_demo.tar.gz colab_package/tridiag_thomas/`
+2. Upload to Google Colab 
+3. Open `tridiag_thomas_demo.ipynb`
+4. Run all cells to see Fortran vs Kokkos GPU performance comparison
+
+## Key Features
+
+- **Educational Focus**: Stage 1 emphasizes algorithm understanding before optimization
+- **Oracle Guidance**: Stage 2 provides expert modernization recommendations  
+- **Rigorous Validation**: Stage 3 ensures numerical correctness within 1e-10 tolerance
+- **GPU Ready**: Automated Colab package generation for GPU acceleration testing
+- **Parallel Implementation**: Subagents handle independent translation tasks concurrently
+
+## Next Steps
+
+- Add new algorithms by creating `algorithms/{name}/stage.yml` configurations
+- Customize validation tolerances and test sizes per algorithm
+- Extend to additional Kokkos backends (CUDA, HIP, SYCL)

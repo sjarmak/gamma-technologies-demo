@@ -9,7 +9,7 @@ echo " Test 1: Building optimized kernel..."
 if ./tools/build_kokkos.sh --kernel mitgcm_demo_optimized --backend openmp >/dev/null 2>&1; then
 echo " Build successful"
 else
-echo "❌ Build failed"
+echo "Build failed"
 exit 1
 fi
 
@@ -62,16 +62,16 @@ echo " Package ready: ${PACKAGE_SIZE}, ${FILE_COUNT} files"
 if tar -tzf fortran_kokkos_demo.tar.gz | grep -q "colab_gpu_demo_optimized.ipynb"; then
 echo " Optimized notebook included"
 else
-echo "❌ Missing optimized notebook"
+echo "Missing optimized notebook"
 fi
 
 if tar -tzf fortran_kokkos_demo.tar.gz | grep -q "mitgcm_demo_optimized"; then
 echo " Optimized kernel included"
 else
-echo "❌ Missing optimized kernel"
+echo "Missing optimized kernel"
 fi
 else
-echo "❌ Demo package not found - run ./prepare_colab_demo.sh"
+echo "Demo package not found - run ./prepare_colab_demo.sh"
 fi
 
 echo ""
@@ -88,7 +88,7 @@ echo " Numerical accuracy: Perfect agreement verified in development"
 if [[ -f "fortran_kokkos_demo.tar.gz" ]]; then
 echo " Demo package: Ready for Colab upload"
 else
-echo "❌ Demo package: Missing"
+echo "Demo package: Missing"
 fi
 
 echo ""

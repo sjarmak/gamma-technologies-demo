@@ -1,39 +1,107 @@
-# Oracle-Optimized Fortran → Kokkos GPU Demo Guide
+# 3-Stage Fortran → Kokkos Demo Guide
 
-## Quick Start Checklist
+## Overview
 
-### **Option 1: Local Demo (M4 Mac Proven)**
+This guide demonstrates the complete 3-stage workflow for translating MITgcm Fortran routines to optimized Kokkos implementations. The process extracts production algorithms, analyzes their structure, and creates GPU-accelerated versions with perfect numerical fidelity.
+
+## Quick Start Options
+
+### **Option 1: Complete 3-Stage Workflow**
 ```bash
-# 1. Verify local optimizations work
-./tools/build_kokkos.sh --kernel mitgcm_demo_optimized --backend openmp
-kokkos/mitgcm_demo_optimized/build/kernel 1024 10 both
+# Run the full pipeline for tridiag_thomas algorithm
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target extract
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target explain  
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target baseline
 
-# Expected output:
-# Naive Time per iteration: 0.0046 seconds
-# Optimized Time per iteration: 0.0002 seconds
-# Speedup: 23.71x
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage2 --target plan
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage2 --target review
+
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target implement
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target validate
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target package_colab
 ```
 
-### **Option 2: Google Colab GPU Demo**
-1. **Open Google Colab**: https://colab.research.google.com
-2. **Upload Notebook**: `colab_gpu_demo_optimized.ipynb`
-3. **Select GPU Runtime**: Runtime → Change runtime type → GPU
-4. **Upload Package**: `fortran_kokkos_demo.tar.gz` (when prompted by notebook)
-5. **Run All Cells**: Expected total time ~15-20 minutes
+### **Option 2: Pre-Built Demo (Legacy)**
+```bash
+# Verify existing optimized implementation
+./tools/build_kokkos.sh --kernel mitgcm_demo_optimized --backend openmp
+kokkos/mitgcm_demo_optimized/build/kernel 1024 10 both
+```
+
+### **Option 3: Google Colab GPU Demo**
+1. **Complete Stage 3**: Run `package_colab` target to generate notebook
+2. **Open Google Colab**: https://colab.research.google.com
+3. **Upload**: Generated notebook from `algorithms/{name}/stage3/package_colab/`
+4. **Select GPU Runtime**: Runtime → Change runtime type → GPU
+5. **Run All Cells**: Follow automated workflow
 
 ---
 
-## Demo Flow & Presentation Script
+## 3-Stage Demo Flow
 
-### **Introduction (2 minutes)**
+### **Stage 1: MITgcm Extraction & Analysis (5 minutes)**
 
-> "Today I'll demonstrate **AI-guided optimization** of HPC code translation, showing how we achieved **perfect numerical fidelity** with **23.7x performance improvement** by implementing Oracle AI recommendations."
+**Script:**
+> "We start by extracting production algorithms from MITgcm and establishing performance baselines."
 
-**Key Opening Points:**
-- Real MITgcm tridiagonal solver (not toy example)
-- Oracle AI provided expert optimization guidance
-- Perfect numerical agreement across platforms
-- Complete M4 Mac → GPU acceleration pipeline
+**Show Stage 1 Execution:**
+```bash
+# Extract the SOLVE_TRIDIAGONAL routine from MITgcm
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target extract
+
+# Generate algorithm documentation
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target explain
+
+# Establish Fortran performance baseline
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target baseline
+```
+
+**Key Points:**
+- Real production code from MITgcm ocean model
+- Automated documentation generation
+- Precise performance baseline for validation
+
+### **Stage 2: Oracle-Guided Planning (3 minutes)**
+
+**Script:**
+> "Our Oracle AI analyzes the algorithm and provides expert-level optimization strategies."
+
+**Show Stage 2 Execution:**
+```bash
+# Create detailed translation plan
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage2 --target plan
+
+# Oracle consultation for optimization guidance  
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage2 --target review
+```
+
+**Show Generated Plans:**
+- Memory layout optimization strategies
+- Parallel pattern recommendations
+- Performance risk assessments
+- Concrete implementation guidance
+
+### **Stage 3: Implementation & Validation (7 minutes)**
+
+**Script:**
+> "The final stage implements the Oracle recommendations and validates perfect numerical accuracy."
+
+**Show Stage 3 Execution:**
+```bash
+# Implement Kokkos translation
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target implement
+
+# Validate against Fortran baseline
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target validate
+
+# Package for Colab demonstration
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target package_colab
+```
+
+**Key Messages:**
+- Automated Kokkos implementation generation
+- Perfect numerical fidelity validation
+- Ready-to-deploy demonstration packages
 
 ### **Stage 1: Numerical Validation Proof (3 minutes)**
 

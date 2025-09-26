@@ -1,137 +1,179 @@
-# Amp End-to-End HPC Optimization Demo
+# 3-Stage Fortran → Kokkos Translation Demo
 
-## Interactive demonstration of Amp's complete workflow for optimizing HPC code translation
+## Complete workflow for modernizing MITgcm HPC algorithms with AI guidance
 
 ### **What This Demo Shows**
-- **Amp's complete optimization process** from naive code to 33x performance improvement
-- **AI-guided analysis and implementation** of complex Kokkos optimizations
-- **Oracle consultation** providing expert-level performance recommendations
-- **Perfect numerical validation** maintained throughout optimization process
-- **Professional deliverables** created automatically by Amp
+- **3-Stage translation pipeline** from MITgcm Fortran to optimized Kokkos implementations
+- **Oracle-guided optimization** providing expert-level performance recommendations
+- **Automated extraction** of production algorithms from MITgcm codebase
+- **Perfect numerical validation** maintained throughout translation process
+- **Professional deliverables** including Colab demonstrations
 
-### **Demo Outcome: 33x Speedup Achievement**
+### **3-Stage Workflow Overview**
 ```bash
-# Starting Point (Naive Implementation)
-Baseline: 0.0046 seconds per iteration
+# Stage 1: Analysis & Extraction
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target extract
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target explain
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target baseline
 
-# After Amp Optimization Process
-Optimized: 0.0001 seconds per iteration
-Improvement: 33.17x speedup
+# Stage 2: Planning & Review  
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage2 --target plan
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage2 --target review
 
-# Numerical Accuracy: max_abs_diff = 0.0 (Perfect fidelity)
+# Stage 3: Implementation & Validation
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target implement
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target validate
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target package_colab
 ```
 
-## **Demo Formats Available**
+## **Demo Options Available**
 
 ### **Quick Demo (5 minutes)**
-Show Amp's final optimization results:
+Experience the complete 3-stage workflow:
 ```bash
 git clone https://github.com/sjarmak/gamma-technologies-demo.git
 cd gamma-technologies-demo
-./test_demo.sh # Shows 33x speedup achieved
+
+# Run complete pipeline for tridiag_thomas algorithm
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target baseline
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage2 --target review
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target validate
 ```
 
-### **Interactive Amp Session (25 minutes)**
-Follow along as Amp optimizes code step-by-step:
+### **Interactive Development (25 minutes)**
+Follow the complete 3-stage process with detailed explanations:
 ```bash
-./setup_amp_demo.sh # Prepare starting point
-# Then follow AMP_DEMO.md for live Amp interaction
+# See QUICK_START.md for step-by-step workflow
+# See DEMO_GUIDE.md for presentation scripts
 ```
 
-### **Complete GPU Pipeline (30 minutes)**
-Full CPU → GPU acceleration demonstration:
-- Local optimization with Amp
+### **Legacy GPU Demo (30 minutes)**
+Pre-built optimization demonstration:
+- Existing optimized implementations
 - Google Colab GPU deployment
-- Professional performance analysis
+- Performance comparison analysis
 
 ## **Demo Documentation**
 
-### **For Presenters**
-- **[`AMP_DEMO.md`](AMP_DEMO.md)** - Complete 25-minute interactive demo script
-- **[`AMP_PROMPTS.md`](AMP_PROMPTS.md)** - Exact prompts and expected Amp responses
-- **[`QUICK_START.md`](QUICK_START.md)** - 30-second to 20-minute demo options
+### **For Quick Start**
+- **[`QUICK_START.md`](QUICK_START.md)** - 30-second to 15-minute workflow options
+- **[`DEMO_GUIDE.md`](DEMO_GUIDE.md)** - Complete 3-stage presentation script
 
-### **For Technical Details**
-- **[`DEMO_GUIDE.md`](DEMO_GUIDE.md)** - Technical deep-dive and troubleshooting
-- **[`progress.md`](progress.md)** - Complete optimization development history
+### **For Development**
+- **[`AGENTS.md`](AGENTS.md)** - Stage contracts and build/run commands
+- **[`docs/amp-guidance.md`](docs/amp-guidance.md)** - 3-stage workflow technical details
 
-## **Demo Setup**
+### **Legacy Documentation**
+- **[`AMP_DEMO.md`](AMP_DEMO.md)** - Interactive Amp optimization session
+- **[`progress.md`](progress.md)** - Historical optimization development
 
-### **Prepare Interactive Demo**
+## **Getting Started**
+
+### **Prerequisites**
 ```bash
-# Set up starting point for live Amp demonstration
-./setup_amp_demo.sh
-
-# This creates the naive baseline and removes optimized versions
-# so you can demonstrate Amp creating them live
+# Required tools for 3-stage workflow
+- Python 3.6+
+- gfortran (Fortran compiler)
+- cmake (for Kokkos builds)
+- git (for MITgcm extraction)
 ```
 
-### **Verify Demo Ready**
+### **Verify Installation**
 ```bash
-# Test that baseline works
-kokkos/mitgcm_demo/build/kernel 1024 5 both
+# Test stage runner with list of targets
+python3 tools/stage_runner.py --algorithm tridiag_thomas --list
 
-# Expected: Shows naive performance (~0.0046s per iteration)
-# Ready to ask Amp to optimize this
+# Expected output: Available stage1/stage2/stage3 targets listed
+```
+
+### **Run Complete Workflow**
+```bash
+# Execute all stages for tridiag_thomas algorithm (5-10 minutes total)
+for stage in stage1 stage2 stage3; do
+    for target in $(python3 tools/stage_runner.py --algorithm tridiag_thomas --list | grep "$stage:" -A 10 | grep "    -" | cut -d'-' -f2 | xargs); do
+        python3 tools/stage_runner.py --algorithm tridiag_thomas --stage $stage --target $target
+    done
+done
 ```
 
 ## **Key Demo Talking Points**
 
 ### **Opening**
-*"Today I'll show Amp's complete workflow for HPC optimization - taking naive code and achieving 33x performance improvement through AI-guided development."*
+*"Today I'll demonstrate the complete 3-stage pipeline for translating production MITgcm algorithms to GPU-accelerated Kokkos implementations with perfect numerical fidelity."*
 
-### **During Amp Analysis**
-*"Watch Amp identify the exact performance bottleneck that an HPC expert would find after detailed profiling - O(nk) kernel launch overhead."*
+### **Stage 1 Highlight**
+*"We start by extracting real production algorithms from MITgcm and establishing precise baselines - this is critical for validation."*
 
-### **During Oracle Consultation**
-*"Amp's Oracle provides expert-level optimization guidance - concrete, implementable strategies rather than vague suggestions."*
+### **Stage 2 Highlight**
+*"Our Oracle AI analyzes the algorithm structure and provides expert-level optimization strategies - memory layouts, parallel patterns, performance risks."*
 
-### **During Implementation**
-*"These TeamPolicy optimizations require deep Kokkos expertise. Amp implements them automatically while maintaining perfect numerical accuracy."*
+### **Stage 3 Highlight**
+*"The final implementation automatically applies Oracle recommendations while maintaining exact numerical accuracy against the original Fortran."*
 
-### **Results Reveal**
-*"33x performance improvement with exact numerical fidelity maintained. This is production-ready optimization achieved in minutes, not weeks."*
+### **Results Emphasis**
+*"Complete workflow from extraction to validation in minutes, with professional deliverables ready for production deployment."*
 
-## **Interactive Prompts for Live Demo**
+## **Interactive 3-Stage Demo Commands**
 
-### **Amp Prompt 1: Analysis**
-```
-Analyze the MITgcm tridiagonal solver in kokkos/mitgcm_demo/src/kernel.cpp.
-Identify performance bottlenecks and recommend specific Kokkos optimizations.
-```
+### **Stage 1 Commands**
+```bash
+# Extract algorithm from MITgcm
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target extract
 
-### **Amp Prompt 2: Oracle Consultation**
-```
-Consult the Oracle to create a concrete optimization plan for this solver.
-I want specific code changes for dramatic GPU performance improvement.
-```
+# Generate documentation
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target explain
 
-### **Amp Prompt 3: Implementation**
-```
-Implement the Oracle recommendations: TeamPolicy kernel, LayoutLeft layout,
-RandomAccess traits, and team scratch memory. Create optimized version
-with performance comparison capability.
+# Create performance baseline
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage1 --target baseline
 ```
 
-### **Expected Outcome**
-Amp creates optimized implementation achieving 33x speedup with perfect accuracy.
+### **Stage 2 Commands**
+```bash
+# Create translation plan
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage2 --target plan
+
+# Oracle consultation
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage2 --target review
+```
+
+### **Stage 3 Commands**
+```bash
+# Implement Kokkos translation
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target implement
+
+# Validate numerical correctness
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target validate
+
+# Package for deployment
+python3 tools/stage_runner.py --algorithm tridiag_thomas --stage stage3 --target package_colab
+```
+
+### **Expected Outcomes**
+- Fortran routine extracted from MITgcm with documentation
+- Oracle-guided translation plan with optimization strategies  
+- Kokkos implementation validated against Fortran baseline
+- Professional Colab demonstration package ready for deployment
 
 ## **Repository Structure**
 
-### **Starting Point (Naive Implementation)**
-- `fortran/mitgcm_demo.f90` - Original MITgcm algorithm
-- `kokkos/mitgcm_demo/` - Naive Fortran→Kokkos translation
-- **Performance**: ~0.0046s per iteration (baseline)
+### **3-Stage Workflow**
+- `tools/stage_runner.py` - Main orchestration tool for all stages
+- `algorithms/tridiag_thomas/stage.yml` - Algorithm configuration and dependencies
+- `algorithms/tridiag_thomas/stage1/` - Extraction, documentation, and baselines
+- `algorithms/tridiag_thomas/stage2/` - Translation plans and Oracle reviews
+- `algorithms/tridiag_thomas/stage3/` - Implementation, validation, and packaging
 
-### **Amp-Generated Optimizations**
-- `kokkos/mitgcm_demo_optimized/` - Created by Amp during demo
-- **Techniques**: TeamPolicy, LayoutLeft, RandomAccess, scratch memory
-- **Performance**: ~0.0001s per iteration (33x improvement)
+### **Supporting Tools**
+- `tools/extract_fortran_routine.sh` - MITgcm routine extraction
+- `tools/explain_mitgcm.py` - Algorithm documentation generator
+- `tools/build_kokkos.sh` - Kokkos build automation
+- `tools/run_fortran.sh` / `tools/run_kokkos.sh` - Execution wrappers
+- `tools/compare_outputs.py` - Numerical validation
 
-### **Validation & Automation**
-- `test_demo.sh` - Automated verification suite
-- `tools/` - Complete build/test/compare pipeline
-- `colab_gpu_demo_optimized.ipynb` - GPU acceleration notebook
+### **Legacy Demonstrations**
+- `kokkos/mitgcm_demo/` - Pre-built naive implementation
+- `kokkos/mitgcm_demo_optimized/` - Pre-built optimized version
+- `colab_gpu_demo_optimized.ipynb` - Legacy GPU demonstration
 
 ## **Success Metrics for Demo**
 
