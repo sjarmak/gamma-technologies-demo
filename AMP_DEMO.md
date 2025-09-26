@@ -1,6 +1,6 @@
-# 🤖 Amp End-to-End HPC Optimization Demo
+# Amp End-to-End HPC Optimization Demo
 
-## 📋 Demo Overview
+## Demo Overview
 
 This demo shows **Amp's complete workflow** for optimizing HPC code translation from Fortran to Kokkos, achieving **33x performance improvement** with perfect numerical accuracy.
 
@@ -8,20 +8,20 @@ This demo shows **Amp's complete workflow** for optimizing HPC code translation 
 
 ---
 
-## 🎯 Demo Structure
+## Demo Structure
 
 ### **Phase 1**: Starting Point (Naive Implementation)
-### **Phase 2**: Amp Analysis & Planning  
+### **Phase 2**: Amp Analysis & Planning
 ### **Phase 3**: Oracle-Guided Optimization
 ### **Phase 4**: Performance Validation
 ### **Phase 5**: GPU Acceleration
 
-**Total Time**: 25-30 minutes  
+**Total Time**: 25-30 minutes
 **Key Outcome**: 33x speedup with exact numerical fidelity
 
 ---
 
-## 📂 **Phase 1: Starting Point (5 minutes)**
+## **Phase 1: Starting Point (5 minutes)**
 
 ### **Set the Scene**
 *"We have a working but naive Fortran→Kokkos translation of a real MITgcm algorithm. It's correct but slow."*
@@ -44,20 +44,20 @@ No optimization - this is our baseline
 ```
 
 ### **Key Talking Points**:
-- ✅ Numerical correctness verified (`max_abs_diff = 0.0`)
+- Numerical correctness verified (`max_abs_diff = 0.0`)
 - ❌ Performance: Multiple kernel launches causing overhead
-- ❌ Memory: Suboptimal layout for GPU coalescing  
+- ❌ Memory: Suboptimal layout for GPU coalescing
 - ❌ Missing: Advanced Kokkos optimization patterns
 
 *"This is where most manual translations stop. But Amp can take it much further."*
 
 ---
 
-## 🧠 **Phase 2: Amp Analysis & Planning (5 minutes)**
+## **Phase 2: Amp Analysis & Planning (5 minutes)**
 
 ### **Amp Prompt 1: Initial Analysis**
 ```
-Analyze the MITgcm tridiagonal solver implementation in kokkos/mitgcm_demo/src/kernel.cpp. 
+Analyze the MITgcm tridiagonal solver implementation in kokkos/mitgcm_demo/src/kernel.cpp.
 Identify performance bottlenecks and recommend specific Kokkos optimizations for GPU acceleration.
 Focus on kernel launch overhead, memory access patterns, and team parallelism opportunities.
 ```
@@ -69,9 +69,9 @@ Amp will identify:
 3. **Missing team parallelism** opportunities
 4. **Global memory usage** for temporaries
 
-### **Amp Prompt 2: Get Oracle Guidance** 
+### **Amp Prompt 2: Get Oracle Guidance**
 ```
-Consult the Oracle to create a concrete optimization plan for this tridiagonal solver. 
+Consult the Oracle to create a concrete optimization plan for this tridiagonal solver.
 I want specific code changes that will dramatically improve GPU performance while maintaining exact numerical accuracy.
 ```
 
@@ -79,7 +79,7 @@ I want specific code changes that will dramatically improve GPU performance whil
 Oracle provides **4 specific optimizations**:
 - Single TeamPolicy kernel approach
 - LayoutLeft for coalesced memory access
-- RandomAccess traits for GPU caching  
+- RandomAccess traits for GPU caching
 - Team scratch memory for temporaries
 
 ### **Key Demo Moment**:
@@ -87,11 +87,11 @@ Oracle provides **4 specific optimizations**:
 
 ---
 
-## ⚡ **Phase 3: Oracle-Guided Optimization (10 minutes)**
+## **Phase 3: Oracle-Guided Optimization (10 minutes)**
 
 ### **Amp Prompt 3: Implement Optimization**
 ```
-Based on the Oracle recommendations, create an optimized version of the tridiagonal solver. 
+Based on the Oracle recommendations, create an optimized version of the tridiagonal solver.
 Implement:
 1. Single TeamPolicy kernel to eliminate launch overhead
 2. LayoutLeft memory layout for GPU coalescing
@@ -121,8 +121,8 @@ kokkos/mitgcm_demo_optimized/build/kernel 1024 10 both
 ### **Expected Results**:
 ```
 Naive Time per iteration: 0.0046 seconds
-Optimized Time per iteration: 0.0001 seconds  
-Speedup: 33.17x ⚡
+Optimized Time per iteration: 0.0001 seconds
+Speedup: 33.17x
 ```
 
 ### **Key Demo Moment**:
@@ -130,11 +130,11 @@ Speedup: 33.17x ⚡
 
 ---
 
-## 🔬 **Phase 4: Performance Validation (5 minutes)**
+## **Phase 4: Performance Validation (5 minutes)**
 
 ### **Amp Prompt 4: Create Validation Suite**
 ```
-Create a comprehensive test suite that validates both numerical accuracy and performance improvements. 
+Create a comprehensive test suite that validates both numerical accuracy and performance improvements.
 I want to prove the optimizations maintain exact numerical fidelity while dramatically improving performance.
 ```
 
@@ -152,10 +152,10 @@ I want to prove the optimizations maintain exact numerical fidelity while dramat
 
 ### **Expected Output**:
 ```
-✅ Build successful
-✅ 33.17x speedup achieved  
-✅ Perfect numerical agreement verified
-✅ Demo package ready
+Build successful
+33.17x speedup achieved
+Perfect numerical agreement verified
+Demo package ready
 ```
 
 ### **Key Talking Points**:
@@ -166,18 +166,18 @@ I want to prove the optimizations maintain exact numerical fidelity while dramat
 
 ---
 
-## 🚀 **Phase 5: GPU Acceleration Demo (5 minutes)**
+## **Phase 5: GPU Acceleration Demo (5 minutes)**
 
 ### **Amp Prompt 5: GPU Demo Preparation**
 ```
-Create a Google Colab notebook that demonstrates this optimization on GPU hardware. 
-Include performance visualization, bandwidth analysis, and comparison charts. 
+Create a Google Colab notebook that demonstrates this optimization on GPU hardware.
+Include performance visualization, bandwidth analysis, and comparison charts.
 The notebook should showcase the complete M4 Mac → Tesla GPU acceleration pipeline.
 ```
 
 ### **Watch Amp Deliver**:
 1. Professional Jupyter notebook with GPU optimizations
-2. Performance visualization and scaling analysis  
+2. Performance visualization and scaling analysis
 3. Memory bandwidth utilization studies
 4. Complete Colab upload package
 
@@ -191,7 +191,7 @@ The notebook should showcase the complete M4 Mac → Tesla GPU acceleration pipe
 
 ---
 
-## 🎤 **Amp Demo Script & Talking Points**
+## **Amp Demo Script & Talking Points**
 
 ### **Opening (30 seconds)**
 *"Today I'll show you how Amp transforms HPC code optimization from a weeks-long expert task into a 30-minute AI-guided process, achieving 33x performance improvements with perfect numerical accuracy."*
@@ -199,7 +199,7 @@ The notebook should showcase the complete M4 Mac → Tesla GPU acceleration pipe
 ### **During Oracle Consultation**
 *"This is Amp's Oracle - an AI advisor that provides expert-level optimization guidance. Notice it doesn't give vague suggestions but concrete, implementable code changes."*
 
-### **During Implementation**  
+### **During Implementation**
 *"Watch Amp implement complex Kokkos optimizations automatically - TeamPolicy parallelism, memory layout optimization, GPU-specific traits. This would take an expert days to implement manually."*
 
 ### **During Validation**
@@ -210,7 +210,7 @@ The notebook should showcase the complete M4 Mac → Tesla GPU acceleration pipe
 
 ---
 
-## 🎯 **Interactive Prompts for Live Demo**
+## **Interactive Prompts for Live Demo**
 
 ### **For Technical Audience**:
 ```
@@ -218,7 +218,7 @@ The notebook should showcase the complete M4 Mac → Tesla GPU acceleration pipe
 ```
 
 ### **For Business Audience**:
-```  
+```
 "Amp, what's the business impact of reducing optimization time from weeks to minutes while maintaining perfect accuracy?"
 ```
 
@@ -229,16 +229,16 @@ The notebook should showcase the complete M4 Mac → Tesla GPU acceleration pipe
 
 ---
 
-## 🛠️ **Demo Preparation Checklist**
+## **Demo Preparation Checklist**
 
 ### **Before Demo**:
 - [ ] Test all commands work locally
-- [ ] Verify 33x speedup reproduces  
+- [ ] Verify 33x speedup reproduces
 - [ ] Have Colab account ready (for GPU portion)
 - [ ] Check internet connectivity for Oracle calls
 
 ### **Materials Needed**:
-- [ ] This demo repository 
+- [ ] This demo repository
 - [ ] Google Colab access (for GPU demo)
 - [ ] Screen sharing setup
 - [ ] Backup slides (in case of technical issues)
@@ -252,29 +252,29 @@ If live Amp interaction fails:
 
 ---
 
-## ✅ **Success Metrics for Demo**
+## **Success Metrics for Demo**
 
 ### **Technical Success**:
-- ✅ 33x performance improvement demonstrated
-- ✅ Perfect numerical accuracy maintained  
-- ✅ Real-world algorithm successfully optimized
-- ✅ GPU acceleration pipeline functional
+- 33x performance improvement demonstrated
+- Perfect numerical accuracy maintained
+- Real-world algorithm successfully optimized
+- GPU acceleration pipeline functional
 
 ### **Audience Engagement**:
-- ✅ Clear before/after performance comparison
-- ✅ Live AI interaction demonstrated
-- ✅ Concrete optimization techniques explained
-- ✅ Production-quality results showcased
+- Clear before/after performance comparison
+- Live AI interaction demonstrated
+- Concrete optimization techniques explained
+- Production-quality results showcased
 
 ### **Business Value**:
-- ✅ Expert-level results in minutes vs weeks
-- ✅ Exact numerical fidelity maintained
-- ✅ Platform portability achieved
-- ✅ Reproducible optimization workflow
+- Expert-level results in minutes vs weeks
+- Exact numerical fidelity maintained
+- Platform portability achieved
+- Reproducible optimization workflow
 
 ---
 
-## 🎉 **Demo Finale**
+## **Demo Finale**
 
 *"This demonstrates the future of HPC development: AI agents that can analyze, optimize, and validate complex scientific code with expert-level results. What took HPC specialists weeks now takes Amp minutes - while maintaining perfect numerical accuracy."*
 

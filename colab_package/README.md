@@ -5,22 +5,22 @@ A reproducible demonstration workspace showcasing the translation of computation
 ## Repository Structure
 
 ```
-├── fortran/              # Fortran reference implementations
-│   ├── mitgcm_demo.f90   # MITgcm tridiagonal solver (extracted)
-│   ├── cg.f90           # Conjugate gradient demo
-│   └── ep.f90           # Embarrassingly parallel demo
-├── kokkos/              # Kokkos C++ translations
-│   ├── mitgcm_demo/src/kernel.cpp  # Main tridiagonal solver
-│   ├── cg/src/kernel.cpp           # CG translation
-│   └── ep/src/kernel.cpp           # EP translation
-├── tools/               # Build/run/compare automation
-│   ├── build_kokkos.sh  # Kokkos build automation
-│   ├── run_kokkos.sh    # Kokkos execution wrapper
-│   ├── run_fortran.sh   # Fortran execution wrapper
-│   └── compare_outputs.py # Numerical validation
+├── fortran/ # Fortran reference implementations
+│ ├── mitgcm_demo.f90 # MITgcm tridiagonal solver (extracted)
+│ ├── cg.f90 # Conjugate gradient demo
+│ └── ep.f90 # Embarrassingly parallel demo
+├── kokkos/ # Kokkos C++ translations
+│ ├── mitgcm_demo/src/kernel.cpp # Main tridiagonal solver
+│ ├── cg/src/kernel.cpp # CG translation
+│ └── ep/src/kernel.cpp # EP translation
+├── tools/ # Build/run/compare automation
+│ ├── build_kokkos.sh # Kokkos build automation
+│ ├── run_kokkos.sh # Kokkos execution wrapper
+│ ├── run_fortran.sh # Fortran execution wrapper
+│ └── compare_outputs.py # Numerical validation
 ├── docs/
-│   └── amp-guidance.md  # Development methodology
-└── AGENTS.md           # Workflow contracts
+│ └── amp-guidance.md # Development methodology
+└── AGENTS.md # Workflow contracts
 ```
 
 ## Quick Start
@@ -63,10 +63,10 @@ python3 tools/compare_outputs.py --fortran outputs/mitgcm_demo_fortran.csv --kok
 
 ### Oracle-Reviewed Implementation
 The Kokkos translation received expert review focusing on:
-- ✅ Sequential k-loop handling (preserves dependencies)
-- ⚠️ Memory layout optimization recommended (use LayoutLeft)
-- ✅ Proper fence placement for timing
-- ⚠️ Performance improvements suggested (TeamPolicy approach)
+- Sequential k-loop handling (preserves dependencies)
+- Memory layout optimization recommended (use LayoutLeft)
+- Proper fence placement for timing
+- Performance improvements suggested (TeamPolicy approach)
 
 ### Automated Validation Pipeline
 - **Tolerance**: `max_abs_diff <= 1e-10` for double precision
@@ -77,9 +77,9 @@ The Kokkos translation received expert review focusing on:
 
 | Kernel | N | Reps | Fortran Time/iter | Status |
 |--------|---|------|------------------|---------|
-| mitgcm_demo | 256 | 2 | 0.0006s | ✅ Validated |
-| cg | 64 | 2 | <0.0001s | ✅ Validated |  
-| ep | 128 | 2 | 0.0004s | ✅ Validated |
+| mitgcm_demo | 256 | 2 | 0.0006s | Validated |
+| cg | 64 | 2 | <0.0001s | Validated |
+| ep | 128 | 2 | 0.0004s | Validated |
 
 *Note: Kokkos performance pending library installation*
 

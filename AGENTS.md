@@ -5,8 +5,8 @@ See @tools/*.sh
 
 ---
 globs:
-  - 'fortran/**/*.f*'
-  - 'kokkos/**/src/*.cpp'
+- 'fortran/**/*.f*'
+- 'kokkos/**/src/*.cpp'
 ---
 
 ## Contracts
