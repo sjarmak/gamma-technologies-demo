@@ -1,0 +1,5 @@
+build/
+outputs/
+*.o
+*.mod
+a.out

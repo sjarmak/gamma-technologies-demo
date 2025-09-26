@@ -1,0 +1,11 @@
+import numpy as np, argparse, sys, os
+p=argparse.ArgumentParser()
+p.add_argument("--fortran", required=True)
+p.add_argument("--kokkos", required=True)
+p.add_argument("--tol", type=float, default=1e-10)
+a=p.parse_args()
+f=np.loadtxt(a.fortran, delimiter=",")
+k=np.loadtxt(a.kokkos, delimiter=",")
+diff = 0.0 if (f.size==0 and k.size==0) else np.max(np.abs(f-k))
+print(f"max_abs_diff={diff}")
+sys.exit(0 if diff <= a.tol else 1)

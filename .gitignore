@@ -1,0 +1,6 @@
+build/
+outputs/
+mitgcm_repo/
+*.o
+*.mod
+a.out
